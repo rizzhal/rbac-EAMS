@@ -13,7 +13,6 @@ export default function App () {
   return (
     <>
     <Toaster position="top-center" />
-    <Navbar/>
     <Routes>
       <Route path="/" element={<HomePage/>} />
       <Route path="/signup" element={<SignUpPage/>} />

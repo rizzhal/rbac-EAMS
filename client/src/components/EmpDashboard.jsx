@@ -63,7 +63,6 @@ const EmpDash = () => {
 
       setTasks(response.tasks || []);
     } catch (error) {
-      console.error("Failed to fetch tasks:", error);
 
       toast.error(
         error.response?.data?.message || "Failed to fetch tasks"
@@ -794,7 +793,7 @@ const EmpDash = () => {
 
                   <div className="overflow-x-auto">
 
-                    <table className="w-full min-w-[700px] text-sm">
+                    <table className="w-full min-w-175 text-sm">
 
                       <thead>
 
@@ -858,7 +857,7 @@ const EmpDash = () => {
                                     {task.title}
                                   </p>
 
-                                  <p className="mt-1 max-w-[280px] truncate text-xs text-slate-400">
+                                  <p className="mt-1 max-w-70 truncate text-xs text-slate-400">
                                     {task.description}
                                   </p>
 

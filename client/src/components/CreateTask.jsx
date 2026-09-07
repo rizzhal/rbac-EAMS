@@ -59,39 +59,36 @@ const CreateTask = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [employees , setEmployees] = useState([]);
-  const [employeesLoading , setEmployeesLoading] = useState(false)
+  const [employees, setEmployees] = useState([]);
+  const [employeesLoading, setEmployeesLoading] = useState(false)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-      const fetchEmployees = async () => {
-        setEmployeesLoading(true)
-        try {
-            const response = await getEmployees();
-            console.log(response.employees)
-            setEmployees(response.employees)
-        } catch (error) {
-          toast.error("Failed to fetch employees")
-        } finally {
-          setEmployeesLoading(false)
-        }
+    const fetchEmployees = async () => {
+      setEmployeesLoading(true)
+      try {
+        const response = await getEmployees();
+        setEmployees(response.employees)
+      } catch (error) {
+        toast.error("Failed to fetch employees")
+      } finally {
+        setEmployeesLoading(false)
       }
-      fetchEmployees()
-    },[])
+    }
+    fetchEmployees()
+  }, [])
 
   const handleSubmit = async (e) => {
-
-        e.preventDefault();
-
-    if(!assigned){
-        toast.error("please select an employee")
-        return
+    e.preventDefault();
+    if (!assigned) {
+      toast.error("please select an employee")
+      return
     }
     setLoading(true);
     try {
 
-      await createTask({title, description, assigned, priority});
+      await createTask({ title, description, assigned, priority });
 
       toast.success("Task created successfully");
 
@@ -104,7 +101,7 @@ const CreateTask = () => {
       setPriority("medium");
 
       navigate("/admin-dashboard")
-      
+
 
     } catch (error) {
 
@@ -121,7 +118,7 @@ const CreateTask = () => {
     }
   };
 
-   
+
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-10">
@@ -205,18 +202,18 @@ const CreateTask = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {employeesLoading ? (
-                        <SelectItem value = "loading"  >
+                        <SelectItem value="loading"  >
                           loading...
                         </SelectItem>
-                      ): employees.length === 0 ? (
-                        <SelectItem value = "none"   >
-                           No employees found
+                      ) : employees.length === 0 ? (
+                        <SelectItem value="none"   >
+                          No employees found
                         </SelectItem>
-                      ): (
+                      ) : (
                         employees.map((employee) => (
-                          <SelectItem 
-                          key={employee._id}
-                          value = {employee._id} >
+                          <SelectItem
+                            key={employee._id}
+                            value={employee._id} >
                             {employee.name} — {employee.email}
                           </SelectItem>
                         ))
@@ -236,11 +233,10 @@ const CreateTask = () => {
                       type="button"
                       variant="outline"
                       onClick={() => setPriority("low")}
-                      className={`flex-1 border-slate-200 ${
-                        priority === "low"
+                      className={`flex-1 border-slate-200 ${priority === "low"
                           ? "border-blue-600 bg-blue-50 text-blue-600 hover:bg-blue-50 hover:text-blue-600"
                           : "text-slate-600 hover:border-blue-300 hover:text-blue-600"
-                      }`}
+                        }`}
                     >
                       <Flag className="mr-2 h-4 w-4" />
                       Low
@@ -250,11 +246,10 @@ const CreateTask = () => {
                       type="button"
                       variant="outline"
                       onClick={() => setPriority("medium")}
-                      className={`flex-1 border-slate-200 ${
-                        priority === "medium"
+                      className={`flex-1 border-slate-200 ${priority === "medium"
                           ? "border-blue-600 bg-blue-50 text-blue-600 hover:bg-blue-50 hover:text-blue-600"
                           : "text-slate-600 hover:border-blue-300 hover:text-blue-600"
-                      }`}
+                        }`}
                     >
                       <Flag className="mr-2 h-4 w-4" />
                       Medium
@@ -264,11 +259,10 @@ const CreateTask = () => {
                       type="button"
                       variant="outline"
                       onClick={() => setPriority("high")}
-                      className={`flex-1 border-slate-200 ${
-                        priority === "high"
+                      className={`flex-1 border-slate-200 ${priority === "high"
                           ? "border-blue-600 bg-blue-50 text-blue-600 hover:bg-blue-50 hover:text-blue-600"
                           : "text-slate-600 hover:border-blue-300 hover:text-blue-600"
-                      }`}
+                        }`}
                     >
                       <Flag className="mr-2 h-4 w-4" />
                       High

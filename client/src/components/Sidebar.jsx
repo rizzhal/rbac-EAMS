@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from './ui/button'
 import { ClipboardList, LayoutDashboard, LogOut, Plus, Settings, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
@@ -54,7 +55,7 @@ const Sidebar = () => {
             className="w-full justify-start gap-3 text-slate-600"
           >
             <Plus size={18} />
-            Create Task
+            <Link to={"/create-task"} > Create Task</Link>
           </Button>
 
           <p className="mb-3 mt-8 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">

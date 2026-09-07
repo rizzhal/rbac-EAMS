@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
 
 import {
@@ -25,10 +25,58 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Sidebar from "./Sidebar";
+import { useNavigate } from "react-router-dom";
+import { getTasks, } from "@/services/taskService";
 
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [tasks, setTasks] = useState([]);
+  const [tasksLoading, setTasksLoading] = useState(true);
+
+  const fetchTasks = async () => {
+      setTasksLoading(true)
+      try { 
+        const response = await getTasks()
+        setTasks(response.tasks || [])
+      } catch (error) {
+        toast.error(
+        error.response?.data?.message || "Failed to fetch tasks"
+      );
+      } finally {
+        setTasksLoading(false)
+      }
+
+  }
+
+  useEffect(() => {
+    fetchTasks()
+  },[])
+
+  const handleClick = () => {
+    navigate("/create-task")
+  }
+
+  const allTasks = tasks.length
+  
+  const pendingTasks = tasks.filter((task) => task.status === "pending").length
+
+  const inProgress = tasks.filter((task) => task.status === "in-progress").length
+
+  const completedTasks = tasks.filter((task) => task.status === "completed").length
+
+  const completionPercentage = allTasks === 0
+      ? 0
+      : Math.round((completedTasks / allTasks) * 100);
+
+  const pendingTaskPercentage = pendingTasks === 0 ? 0 
+    : Math.round((completedTasks / pendingTasks))
+
+  const inProgressTaskPercentage = 
+    inProgress === 0 ? 0 : 
+    Math.round((completedTasks / inProgress))
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -82,11 +130,15 @@ const AdminDashboard = () => {
                     {user?.name}
                   </p>
 
-                  <p className="text-xs text-slate-400">
+                  {user?.role === "admin" ? 
+                  ( <p className="text-xs text-slate-400">
                     Administrator
+                  </p>) : (
+                     <p className="text-xs text-slate-400">
+                    Employee
                   </p>
+                  )}
                 </div>
-
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600">
                   {user?.name?.charAt(0).toUpperCase()}
                 </div>
@@ -115,7 +167,7 @@ const AdminDashboard = () => {
               </p>
             </div>
 
-            <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+            <Button onClick = {handleClick} className="gap-2 bg-blue-600 hover:bg-blue-700">
               <Plus size={18} />
               Create Task
             </Button>
@@ -137,7 +189,7 @@ const AdminDashboard = () => {
                     </p>
 
                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                      128
+                      {allTasks}
                     </p>
                   </div>
 
@@ -166,7 +218,7 @@ const AdminDashboard = () => {
                     </p>
 
                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                      42
+                      {pendingTasks}
                     </p>
                   </div>
 
@@ -195,7 +247,7 @@ const AdminDashboard = () => {
                     </p>
 
                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                      53
+                      {inProgress}
                     </p>
                   </div>
 
@@ -219,12 +271,10 @@ const AdminDashboard = () => {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-sm font-medium text-slate-500">
-                      Completed
+                    <p className="text-sm font-medium text-slate-500">  
                     </p>
-
                     <p className="mt-2 text-3xl font-bold text-slate-900">
-                      33
+                      {completedTasks}
                     </p>
                   </div>
 
@@ -273,6 +323,7 @@ const AdminDashboard = () => {
 
                 <div className="overflow-x-auto">
 
+                  
                   <table className="w-full text-sm">
 
                     <thead>
@@ -296,30 +347,25 @@ const AdminDashboard = () => {
 
                       </tr>
                     </thead>
+                    {tasks.map((task)=> (
 
                     <tbody>
 
-                      <tr className="border-b">
+                         <tr key={task._id} className="border-b">
 
                         <td className="px-6 py-4">
                           <p className="font-medium text-slate-800">
-                            Design Landing Page
+                            {task.title}
                           </p>
-
+                             {user.role}
                           <p className="text-xs text-slate-400">
-                            Assigned to Martin
+                            {task.assigned}
                           </p>
                         </td>
 
                         <td className="px-6 py-4">
                           <Badge className="bg-red-50 text-red-600 hover:bg-red-50">
-                            High
-                          </Badge>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Badge className="bg-blue-50 text-blue-600 hover:bg-blue-50">
-                            In Progress
+                            {task.status}
                           </Badge>
                         </td>
 
@@ -330,75 +376,11 @@ const AdminDashboard = () => {
                         </td>
 
                       </tr>
-
-                      <tr className="border-b">
-
-                        <td className="px-6 py-4">
-                          <p className="font-medium text-slate-800">
-                            Authentication Bug
-                          </p>
-
-                          <p className="text-xs text-slate-400">
-                            Assigned to John
-                          </p>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Badge className="bg-orange-50 text-orange-600 hover:bg-orange-50">
-                            Medium
-                          </Badge>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Badge className="bg-orange-50 text-orange-600 hover:bg-orange-50">
-                            Pending
-                          </Badge>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical size={18} />
-                          </Button>
-                        </td>
-
-                      </tr>
-
-                      <tr className="border-b">
-
-                        <td className="px-6 py-4">
-                          <p className="font-medium text-slate-800">
-                            Database Optimization
-                          </p>
-
-                          <p className="text-xs text-slate-400">
-                            Assigned to Alex
-                          </p>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Badge className="bg-green-50 text-green-600 hover:bg-green-50">
-                            Low
-                          </Badge>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Badge className="bg-green-50 text-green-600 hover:bg-green-50">
-                            Completed
-                          </Badge>
-                        </td>
-
-                        <td className="px-6 py-4">
-                          <Button variant="ghost" size="icon">
-                            <MoreVertical size={18} />
-                          </Button>
-                        </td>
-
-                      </tr>
-
+                    
                     </tbody>
-
+                    ))}
                   </table>
-
+                   
                 </div>
 
               </CardContent>
@@ -425,48 +407,53 @@ const AdminDashboard = () => {
                   <div>
                     <div className="mb-2 flex justify-between text-sm">
                       <span className="text-slate-600">
-                        Completed
+                        {completedTasks}
                       </span>
 
                       <span className="font-semibold">
-                        33
+                        {completionPercentage}
                       </span>
                     </div>
 
                     <div className="h-2 rounded-full bg-slate-100">
-                      <div className="h-2 w-[65%] rounded-full bg-green-500" />
+                      <div className="h-2 w-[65%] rounded-full bg-green-500"
+                      style={{
+                        width:`${completionPercentage}`
+                      }} />
                     </div>
                   </div>
 
                   <div>
                     <div className="mb-2 flex justify-between text-sm">
                       <span className="text-slate-600">
-                        In Progress
+                        {inProgress}
                       </span>
 
                       <span className="font-semibold">
-                        53
+                        {inProgressTaskPercentage}
                       </span>
                     </div>
 
                     <div className="h-2 rounded-full bg-slate-100">
-                      <div className="h-2 w-[80%] rounded-full bg-blue-500" />
+                      <div className="h-2 w-[80%] rounded-full bg-blue-500" 
+                      style={{width: `${inProgressTaskPercentage}`}} />
                     </div>
                   </div>
 
                   <div>
                     <div className="mb-2 flex justify-between text-sm">
                       <span className="text-slate-600">
-                        Pending
+                        {pendingTasks}
                       </span>
 
                       <span className="font-semibold">
-                        42
+                        {pendingTaskPercentage}
                       </span>
                     </div>
 
                     <div className="h-2 rounded-full bg-slate-100">
-                      <div className="h-2 w-[55%] rounded-full bg-orange-500" />
+                      <div className="h-2 w-[55%] rounded-full bg-orange-500"
+                       style={{ width:`${pendingTaskPercentage}` }}  />
                     </div>
                   </div>
 
