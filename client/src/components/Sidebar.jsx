@@ -24,8 +24,7 @@ const Sidebar = () => {
         {/* Logo */}
         <div className="flex h-16 items-center border-b px-6">
           <h1 className="text-2xl font-bold">
-            <span className="text-blue-600">Task</span>
-            <span className="text-slate-700">Flow</span>
+            <a href="/"><span className=" text-transparent bg-clip-text bg-linear-to-r from-blue-700 to-blue-500">EAMS</span></a>
           </h1>
 
           <span className="ml-2 text-sm font-medium text-slate-400">

@@ -96,21 +96,6 @@ const AdminDashboard = () => {
 
           <div className="flex h-16 items-center justify-between px-6">
 
-            {/* Search */}
-            <div className="relative hidden w-80 md:block">
-
-              <Search
-                size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-
-              <Input
-                placeholder="Search dashboard..."
-                className="pl-10"
-              />
-
-            </div>
-
             <div className="ml-auto flex items-center gap-4">
 
               {/* Notification */}

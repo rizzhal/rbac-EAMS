@@ -38,7 +38,7 @@ const Navbar = () => {
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl 
         text-transparent bg-clip-text bg-linear-to-r from-blue-700 to-blue-500
-        text-heading font-bold whitespace-nowrap">EMAC</span>
+        text-heading font-bold whitespace-nowrap">EAMS</span>
         </a>
         <button data-collapse-toggle="navbar-multi-level-dropdown" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary" aria-controls="navbar-multi-level-dropdown" aria-expanded="false">
           <span className="sr-only">Open main menu</span>
