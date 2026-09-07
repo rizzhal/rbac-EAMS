@@ -56,6 +56,24 @@ export const getTaskById = async (req , res) => {
     }
 }
 
+export const getMyTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({
+      assigned: req.user.userId,
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      tasks,
+    });
+  } catch (error) {
+    console.error(error.message);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 export const updateTask = async (req, res) => {
     try {
         const { status } = req.body;
@@ -101,5 +119,20 @@ export const updateTask = async (req, res) => {
         return res.status(500).json({
             message: "Internal server error"
         });
+    }
+}
+
+export const getEmployees = async (req , res) => {
+    try {
+        const employees = await User.find({
+            role: "employee"
+        }).select("-password")
+
+        if(employees.length === 0){
+            return res.status(404).json({message: "Employee not found"})
+        }
+        return res.status(201).json({employees})
+    } catch (error) {
+        return res.status(500).json({message: "Internal server error"})
     }
 }

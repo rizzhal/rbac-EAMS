@@ -19,6 +19,12 @@ const accessRules = [
         action: "VIEW_ALL_TASKS",
         condition: () => true
     },
+    {
+        name: "Admin can view employees",
+        role: "admin",
+        action: "VIEW_EMPLOYEES",
+        condition: () => true
+    },
 
     {
         name: "Employee can view assigned task",
