@@ -3,20 +3,24 @@ import { AuthContext } from '@/context/AuthContext'
 import { logout } from '@/services/authService'
 import { BookOpen, LayoutDashboard, LogOutIcon, Settings2 } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const Navbar = () => {
+
   const { user } = useContext(AuthContext)
 
   const [loggedIn, setLoggedin] = useState(false)
 
+  const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
       await logout()
       setLoggedin(false)
+      navigate("/login")
     } catch (error) {
-
+      toast.error(error.response?.data?.message || "Error logging out")
     }
   }
 

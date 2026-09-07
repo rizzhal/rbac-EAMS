@@ -1,9 +1,23 @@
 import React from 'react'
 import { Button } from './ui/button'
 import { ClipboardList, LayoutDashboard, LogOut, Plus, Settings, Users } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { logout } from '@/services/authService'
+import { toast } from 'sonner'
 
 const Sidebar = () => {
+
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+      navigate("/login")
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error logging out")
+    }
+  }
+
   return (
      <aside className="fixed left-0 top-0 hidden h-screen w-64 border-r bg-white lg:block">
 
@@ -85,7 +99,7 @@ const Sidebar = () => {
             </p>
           </div>
 
-          <Button
+          <Button onClick = {handleLogout}
             variant="ghost"
             className="w-full justify-start gap-3 text-red-500 hover:bg-red-50 hover:text-red-600"
           >

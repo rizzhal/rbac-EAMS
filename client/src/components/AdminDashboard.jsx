@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
 
 import {
@@ -26,7 +26,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
-import { getTasks, } from "@/services/taskService";
+import { getTasks } from "@/services/taskService";
+import { toast } from "sonner";
 
 
 const AdminDashboard = () => {
@@ -34,10 +35,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const [tasks, setTasks] = useState([]);
-  const [tasksLoading, setTasksLoading] = useState(true);
 
   const fetchTasks = async () => {
-      setTasksLoading(true)
       try { 
         const response = await getTasks()
         setTasks(response.tasks || [])
@@ -45,8 +44,6 @@ const AdminDashboard = () => {
         toast.error(
         error.response?.data?.message || "Failed to fetch tasks"
       );
-      } finally {
-        setTasksLoading(false)
       }
 
   }
@@ -59,26 +56,33 @@ const AdminDashboard = () => {
     navigate("/create-task")
   }
 
+  
   const allTasks = tasks.length
   
   const pendingTasks = tasks.filter((task) => task.status === "pending").length
-
+  
   const inProgress = tasks.filter((task) => task.status === "in-progress").length
-
+  
   const completedTasks = tasks.filter((task) => task.status === "completed").length
 
   const completionPercentage = allTasks === 0
-      ? 0
-      : Math.round((completedTasks / allTasks) * 100);
-
+  ? 0
+  : Math.round((completedTasks / allTasks) * 100);
+  
   const pendingTaskPercentage = pendingTasks === 0 ? 0 
     : Math.round((completedTasks / pendingTasks))
 
-  const inProgressTaskPercentage = 
+    const inProgressTaskPercentage = 
     inProgress === 0 ? 0 : 
     Math.round((completedTasks / inProgress))
 
-  return (
+
+
+    const recentTasks = useMemo(() => {
+       return[...tasks].slice(0, 5)
+    },[tasks])
+    
+    return (
     <div className="min-h-screen bg-slate-50">
 
       {/* ================= SIDEBAR ================= */}
@@ -271,7 +275,8 @@ const AdminDashboard = () => {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-sm font-medium text-slate-500">  
+                    <p className="text-sm font-medium text-slate-500">
+                      Completed Tasks  
                     </p>
                     <p className="mt-2 text-3xl font-bold text-slate-900">
                       {completedTasks}
@@ -347,11 +352,9 @@ const AdminDashboard = () => {
 
                       </tr>
                     </thead>
-                    {tasks.map((task)=> (
-
                     <tbody>
-
-                         <tr key={task._id} className="border-b">
+                      {recentTasks.map((task) => (
+                        <tr key={task._id} className="border-b">
 
                         <td className="px-6 py-4">
                           <p className="font-medium text-slate-800">
@@ -365,6 +368,12 @@ const AdminDashboard = () => {
 
                         <td className="px-6 py-4">
                           <Badge className="bg-red-50 text-red-600 hover:bg-red-50">
+                            {task.priority}
+                          </Badge>
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <Badge variant="outline">
                             {task.status}
                           </Badge>
                         </td>
@@ -375,10 +384,9 @@ const AdminDashboard = () => {
                           </Button>
                         </td>
 
-                      </tr>
-                    
+                        </tr>
+                      ))}
                     </tbody>
-                    ))}
                   </table>
                    
                 </div>

@@ -55,7 +55,7 @@ const EmpDash = () => {
 
   // FETCH TASKS
  
-  const fetchApi = async () => {
+ const fetchApi = async () => {
     setTasksLoading(true);
 
     try {
