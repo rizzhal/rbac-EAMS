@@ -1,23 +1,16 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 
 import {
-  Bell,
   CalendarDays,
   CheckCircle2,
   ChevronDown,
   CircleDot,
   ClipboardList,
   Clock3,
-  Folder,
-  HelpCircle,
   LayoutDashboard,
   LogOut,
   Menu,
   MoreVertical,
-  Search,
-  Settings,
-  UserRound,
-  Users,
   X,
 } from "lucide-react";
 
@@ -33,7 +26,6 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 import {
   Select,
@@ -44,6 +36,7 @@ import {
 } from "@/components/ui/select";
 
 import { toast } from "sonner";
+
 
 const EmpDash = () => {
   const { user } = useContext(AuthContext);
@@ -140,45 +133,10 @@ const EmpDash = () => {
       icon: LayoutDashboard,
       active: true,
     },
-    {
-      title: "My Tasks",
-      icon: ClipboardList,
-    },
-    {
-      title: "Calendar",
-      icon: CalendarDays,
-    },
-    {
-      title: "My Projects",
-      icon: Folder,
-    },
-    {
-      title: "Completed Tasks",
-      icon: CheckCircle2,
-    },
+    
   ];
 
-  const analytics = [
-    {
-      title: "Performance",
-      icon: CircleDot,
-    },
-    {
-      title: "Reports",
-      icon: ClipboardList,
-    },
-  ];
-
-  const communication = [
-    {
-      title: "Messages",
-      icon: Users,
-    },
-    {
-      title: "Announcements",
-      icon: Bell,
-    },
-  ];
+ 
 
   // --------------------------------------------------
   // SIDEBAR
@@ -198,13 +156,8 @@ const EmpDash = () => {
 
       <div className="flex h-16 items-center justify-between border-b px-6">
         <h1 className="text-xl font-bold">
-          <span className="text-blue-600">Task</span>
-          <span className="text-slate-700">Flow</span>
+          <a href="/"><span className="text-transparent bg-clip-text bg-linear-to-r from-blue-700 to-blue-500">EAMS</span></a>
         </h1>
-
-        <span className="text-sm font-medium text-slate-400">
-          Employee
-        </span>
 
         <Button
           variant="ghost"
@@ -248,101 +201,13 @@ const EmpDash = () => {
               );
             })}
           </div>
+         
         </div>
 
-        {/* ANALYTICS */}
-
-        <div className="mt-8">
-          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Analytics
-          </p>
-
-          <div className="space-y-1">
-            {analytics.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <Button
-                  key={item.title}
-                  variant="ghost"
-                  className="w-full justify-start gap-3 text-slate-600 hover:bg-slate-50"
-                >
-                  <Icon size={18} />
-                  {item.title}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* COMMUNICATION */}
-
-        <div className="mt-8">
-          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Communication
-          </p>
-
-          <div className="space-y-1">
-            {communication.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <Button
-                  key={item.title}
-                  variant="ghost"
-                  className="w-full justify-between text-slate-600 hover:bg-slate-50"
-                >
-                  <span className="flex items-center gap-3">
-                    <Icon size={18} />
-                    {item.title}
-                  </span>
-
-                  {item.title === "Messages" && (
-                    <Badge className="bg-blue-100 text-blue-600 hover:bg-blue-100">
-                      2
-                    </Badge>
-                  )}
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* SETTINGS */}
-
-        <div className="mt-8">
-          <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Settings
-          </p>
-
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-slate-600 hover:bg-slate-50"
-          >
-            <UserRound size={18} />
-            Profile
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-slate-600 hover:bg-slate-50"
-          >
-            <Settings size={18} />
-            Settings
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-slate-600 hover:bg-slate-50"
-          >
-            <HelpCircle size={18} />
-            Help & Support
-          </Button>
-        </div>
 
         {/* PROGRESS CARD */}
 
-        <div className="mt-auto pt-8">
+        <div className="mt-96 pt-8">
           <div className="rounded-xl bg-blue-600 p-5 text-white shadow-sm">
 
             <p className="text-sm font-semibold">
@@ -374,9 +239,22 @@ const EmpDash = () => {
         </div>
 
       </div>
+       <div className="absolute bottom-4 left-4 right-4">
+
+          <Button 
+            variant="ghost"
+            className="w-full justify-start gap-3 text-red-500 hover:bg-red-50 hover:text-red-600"
+          >
+            <LogOut size={18} />
+            Logout
+          </Button>
+
+        </div>
     </aside>
   );
 
+  
+  
   return (
     <div className="min-h-screen bg-slate-50">
 
@@ -418,39 +296,10 @@ const EmpDash = () => {
                 <Menu size={21} />
               </Button>
 
-              {/* Search */}
-
-              <div className="relative hidden w-72 md:block lg:w-96">
-
-                <Search
-                  size={17}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-
-                <Input
-                  placeholder="Search tasks, projects..."
-                  className="border-slate-200 bg-slate-50 pl-10"
-                />
-
-              </div>
 
             </div>
 
             <div className="flex items-center gap-3">
-
-              {/* Notification */}
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative"
-              >
-                <Bell size={19} />
-
-                <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] text-white">
-                  3
-                </span>
-              </Button>
 
               {/* User */}
 
@@ -463,7 +312,7 @@ const EmpDash = () => {
                   </p>
 
                   <p className="text-xs text-slate-400">
-                    Employee
+                    {user?.role}
                   </p>
 
                 </div>
@@ -505,15 +354,6 @@ const EmpDash = () => {
               </p>
 
             </div>
-
-            <Button
-              variant="outline"
-              className="w-fit gap-2"
-            >
-              <CalendarDays size={17} />
-              This Week
-              <ChevronDown size={15} />
-            </Button>
 
           </div>
 
@@ -815,9 +655,9 @@ const EmpDash = () => {
                             Created
                           </th>
 
-                          <th className="px-6 py-3">
+                          {/* <th className="px-6 py-3">
                             Action
-                          </th>
+                          </th> */}
 
                         </tr>
 
@@ -910,7 +750,7 @@ const EmpDash = () => {
                                   }
                                 >
 
-                                  <SelectTrigger className="h-8 w-[125px] border-slate-200 text-xs">
+                                  <SelectTrigger className="h-8 w-31.25 border-slate-200 text-xs">
 
                                     <SelectValue />
 
@@ -918,11 +758,11 @@ const EmpDash = () => {
 
                                   <SelectContent>
 
-                                    <SelectItem value="pending">
+                                    <SelectItem className={"text-red-500"} value="pending">
                                       Pending
                                     </SelectItem>
 
-                                    <SelectItem value="in-progress">
+                                    <SelectItem className={"text-"} value="in-progress">
                                       In Progress
                                     </SelectItem>
 

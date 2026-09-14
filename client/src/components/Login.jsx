@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,12 +16,14 @@ import { SignIn } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Spinner } from "./ui/spinner";
 import { getCurrentUser, signIn } from "@/services/authService";
+import { AuthContext } from "@/context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const { setUser } = useContext(AuthContext)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,10 +34,11 @@ const Login = () => {
         email,
         password
       })
-      await getCurrentUser()
+      const { user } = await getCurrentUser()
+      setUser(user)
       setEmail('')
       setPassword('')
-      navigate("/employee-dashboard")
+      navigate(user.role === "admin" ? "/admin-dashboard" : "/employee-dashboard")
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed")
     } finally {
@@ -45,7 +48,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-4">
+    <div className="min-h-screen
+ bg-white flex items-center justify-center px-4">
       <Card className="w-full max-w-md border-blue-100 shadow-lg">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-3xl font-bold text-blue-600">

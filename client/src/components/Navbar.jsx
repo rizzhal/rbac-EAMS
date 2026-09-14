@@ -2,34 +2,25 @@
 import { AuthContext } from '@/context/AuthContext'
 import { logout } from '@/services/authService'
 import { BookOpen, LayoutDashboard, LogOutIcon, Settings2 } from 'lucide-react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const Navbar = () => {
 
-  const { user } = useContext(AuthContext)
-
-  const [loggedIn, setLoggedin] = useState(false)
+  const { user, setUser } = useContext(AuthContext)
 
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     try {
       await logout()
-      setLoggedin(false)
+      setUser(null)
       navigate("/login")
     } catch (error) {
       toast.error(error.response?.data?.message || "Error logging out")
     }
   }
-
-  useEffect(() => {
-    if (!user) {
-      setLoggedin(false)
-    }
-    setLoggedin(true)
-  }, [])
 
   return (
 
@@ -50,17 +41,13 @@ const Navbar = () => {
               <a href="/" className="block py-2 px-3 bg-brand rounded md:bg-transparent md:text-fg-brand md:p-0" aria-current="page">Home</a>
             </li>
             <li>
-              <a href="#" className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Dashboard</a>
+              <Link to={user?.role === "admin" ? "/admin-dashboard": "/employee-dashboard"} 
+              className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 
+              md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">
+                <span>Dashboard</span>
+                </Link>
             </li>
-            <li>
-              <a href="#" className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Pricing</a>
-            </li>
-            <li>
-              <a href="#" className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent">Contact</a>
-            </li>
-
-
-            {loggedIn ? (
+            {user ? (
               <div className="relative group">
                 {/* Profile section */}
                 <div className="flex items-center gap-3 border-l pl-4 cursor-pointer">

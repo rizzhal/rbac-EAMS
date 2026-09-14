@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 export const signupAuth = async (req , res) => {
     try {
-       const {name , email, password, age, } = req.body
+       const {name , email, password, age } = req.body
        if(!name || !email || !password || age === undefined || age === null){
         return res.status(400).json({ message: "Please provide your signup details!" });
        } 

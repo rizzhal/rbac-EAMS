@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Button } from './ui/button'
-import { ClipboardList, LayoutDashboard, LogOut, Plus, Settings, Users } from 'lucide-react'
+import { LayoutDashboard, LogOut, Plus, Settings, Users } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '@/services/authService'
 import { toast } from 'sonner'
+import { AuthContext } from '@/context/AuthContext'
 
 const Sidebar = () => {
 
   const navigate = useNavigate()
+  const { setUser } = useContext(AuthContext)
 
   const handleLogout = async () => {
     try {
       await logout()
+      setUser(null)
       navigate("/login")
     } catch (error) {
       toast.error(error.response?.data?.message || "Error logging out")
@@ -47,21 +50,21 @@ const Sidebar = () => {
             Dashboard
           </Button>
 
-          <Button
+          {/* <Button
             variant="ghost"
             className="w-full justify-start gap-3 text-slate-600"
           >
             <Users size={18} />
             Employees
-          </Button>
+          </Button> */}
 
-          <Button
+          {/* <Button
             variant="ghost"
             className="w-full justify-start gap-3 text-slate-600"
           >
             <ClipboardList size={18} />
             Tasks
-          </Button>
+          </Button> */}
 
           <Button
             variant="ghost"
@@ -69,18 +72,6 @@ const Sidebar = () => {
           >
             <Plus size={18} />
             <Link to={"/create-task"} > Create Task</Link>
-          </Button>
-
-          <p className="mb-3 mt-8 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            System
-          </p>
-
-          <Button
-            variant="ghost"
-            className="w-full justify-start gap-3 text-slate-600"
-          >
-            <Settings size={18} />
-            Settings
           </Button>
 
         </nav>

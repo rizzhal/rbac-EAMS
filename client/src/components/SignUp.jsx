@@ -22,7 +22,7 @@ const SignUp = () => {
         setLoading(true)
         e.preventDefault();
         try {
-            await signUp(name, email, age, password)
+            await signUp({name, email, password, age})
             setName('')
             setEmail('')
             setAge(0)

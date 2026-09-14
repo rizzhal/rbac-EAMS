@@ -22,8 +22,7 @@ import {
 } from "@/components/ui/card";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import { getTasks } from "@/services/taskService";
@@ -47,7 +46,6 @@ const AdminDashboard = () => {
       }
 
   }
-
   useEffect(() => {
     fetchTasks()
   },[])
@@ -97,20 +95,7 @@ const AdminDashboard = () => {
           <div className="flex h-16 items-center justify-between px-6">
 
             <div className="ml-auto flex items-center gap-4">
-
-              {/* Notification */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative"
-              >
-                <Bell size={20} />
-
-                <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
-                  3
-                </span>
-              </Button>
-
+              
               {/* User */}
               <div className="flex items-center gap-3 border-l pl-4">
 
@@ -188,10 +173,6 @@ const AdminDashboard = () => {
 
                 </div>
 
-                <p className="mt-4 text-xs text-green-600">
-                  ↑ 16.2% from last month
-                </p>
-
               </CardContent>
             </Card>
 
@@ -216,10 +197,6 @@ const AdminDashboard = () => {
                   </div>
 
                 </div>
-
-                <p className="mt-4 text-xs text-orange-500">
-                  ↑ 8.4% from last month
-                </p>
 
               </CardContent>
             </Card>
@@ -246,10 +223,6 @@ const AdminDashboard = () => {
 
                 </div>
 
-                <p className="mt-4 text-xs text-blue-600">
-                  ↑ 12.7% from last month
-                </p>
-
               </CardContent>
             </Card>
 
@@ -271,13 +244,7 @@ const AdminDashboard = () => {
                   <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-green-50 text-green-600">
                     <CheckCircle2 size={22} />
                   </div>
-
                 </div>
-
-                <p className="mt-4 text-xs text-green-600">
-                  ↑ 23.1% from last month
-                </p>
-
               </CardContent>
             </Card>
 
