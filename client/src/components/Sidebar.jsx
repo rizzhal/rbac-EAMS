@@ -6,10 +6,11 @@ import { logout } from '@/services/authService'
 import { toast } from 'sonner'
 import { AuthContext } from '@/context/AuthContext'
 
+
 const Sidebar = () => {
 
   const navigate = useNavigate()
-  const { setUser } = useContext(AuthContext)
+  const { user , setUser } = useContext(AuthContext)
 
   const handleLogout = async () => {
     try {
@@ -31,7 +32,7 @@ const Sidebar = () => {
           </h1>
 
           <span className="ml-2 text-sm font-medium text-slate-400">
-            Admin
+            {user?.role}
           </span>
         </div>
 

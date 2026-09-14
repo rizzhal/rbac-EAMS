@@ -126,7 +126,7 @@ const Navbar = () => {
                       <LayoutDashboard className='text-blue-500' size={18} />
                       <span>Dashboard</span>
                     </Link>
-
+{/* 
                     <Link
                       to="/"
                       className="flex items-center gap-3 rounded-lg px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
@@ -141,7 +141,7 @@ const Navbar = () => {
                     >
                       <Settings2 className='text-blue-500' size={18}/>
                       <span>Settings</span>
-                    </Link>
+                    </Link> */}
 
                   </div>
 

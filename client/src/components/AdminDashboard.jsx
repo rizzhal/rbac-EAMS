@@ -30,25 +30,28 @@ import { toast } from "sonner";
 
 
 const AdminDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [tasks, setTasks] = useState([]);
 
   const fetchTasks = async () => {
-      try { 
-        const response = await getTasks()
-        setTasks(response.tasks || [])
-      } catch (error) {
-        toast.error(
+    try {
+      const response = await getTasks();
+      const taskList = response?.tasks ?? response?.data?.tasks ?? response;
+      setTasks(Array.isArray(taskList) ? taskList : []);
+    } catch (error) {
+      toast.error(
         error.response?.data?.message || "Failed to fetch tasks"
       );
-      }
+    }
+  };
 
-  }
   useEffect(() => {
-    fetchTasks()
-  },[])
+    if (!loading && user?.role === "admin") {
+      fetchTasks();
+    }
+  }, [loading, user?.role]);
 
   const handleClick = () => {
     navigate("/create-task")
@@ -67,12 +70,13 @@ const AdminDashboard = () => {
   ? 0
   : Math.round((completedTasks / allTasks) * 100);
   
-  const pendingTaskPercentage = pendingTasks === 0 ? 0 
-    : Math.round((completedTasks / pendingTasks))
+  const pendingTaskPercentage = allTasks === 0
+    ? 0
+    : Math.round((pendingTasks / allTasks) * 100);
 
-    const inProgressTaskPercentage = 
-    inProgress === 0 ? 0 : 
-    Math.round((completedTasks / inProgress))
+  const inProgressTaskPercentage = allTasks === 0
+    ? 0
+    : Math.round((inProgress / allTasks) * 100);
 
 
 
@@ -96,7 +100,7 @@ const AdminDashboard = () => {
 
             <div className="ml-auto flex items-center gap-4">
               
-              {/* User */}
+              
               <div className="flex items-center gap-3 border-l pl-4">
 
                 <div className="hidden text-right sm:block">
@@ -312,9 +316,8 @@ const AdminDashboard = () => {
                           <p className="font-medium text-slate-800">
                             {task.title}
                           </p>
-                             {user.role}
                           <p className="text-xs text-slate-400">
-                            {task.assigned}
+                            {task.assigned?.name || "Unassigned"}
                           </p>
                         </td>
 
@@ -378,7 +381,7 @@ const AdminDashboard = () => {
                     <div className="h-2 rounded-full bg-slate-100">
                       <div className="h-2 w-[65%] rounded-full bg-green-500"
                       style={{
-                        width:`${completionPercentage}`
+                        width: `${completionPercentage}%`
                       }} />
                     </div>
                   </div>
@@ -396,7 +399,7 @@ const AdminDashboard = () => {
 
                     <div className="h-2 rounded-full bg-slate-100">
                       <div className="h-2 w-[80%] rounded-full bg-blue-500" 
-                      style={{width: `${inProgressTaskPercentage}`}} />
+                      style={{ width: `${inProgressTaskPercentage}%` }} />
                     </div>
                   </div>
 
@@ -413,7 +416,7 @@ const AdminDashboard = () => {
 
                     <div className="h-2 rounded-full bg-slate-100">
                       <div className="h-2 w-[55%] rounded-full bg-orange-500"
-                       style={{ width:`${pendingTaskPercentage}` }}  />
+                       style={{ width: `${pendingTaskPercentage}%` }} />
                     </div>
                   </div>
 
@@ -450,7 +453,7 @@ const AdminDashboard = () => {
 
           {/* ================= QUICK ACTIONS ================= */}
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-
+{/* 
             <Card className="border-0 shadow-sm">
 
               <CardContent className="flex items-center gap-4 p-5">
@@ -471,9 +474,9 @@ const AdminDashboard = () => {
 
               </CardContent>
 
-            </Card>
+            </Card> */}
 
-            <Card className="border-0 shadow-sm">
+            {/* <Card className="border-0 shadow-sm">
 
               <CardContent className="flex items-center gap-4 p-5">
 
@@ -513,9 +516,9 @@ const AdminDashboard = () => {
                   </p>
                 </div>
 
-              </CardContent>
+              </CardContent> 
 
-            </Card>
+            </Card>*/}
 
           </div>
 
