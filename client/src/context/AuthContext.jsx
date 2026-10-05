@@ -14,7 +14,9 @@ export const AuthProvider = ({ children }) => {
       const response = await getCurrentUser();
       setUser(response.user);
     } catch (error) {
-      console.error("User is not authenticated:", error);
+      if (error.response?.status !== 401) {
+        console.error("Failed to check the current user:", error);
+      }
       setUser(null);
     } finally {
       setLoading(false);

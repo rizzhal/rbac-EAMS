@@ -36,14 +36,31 @@ import {
 } from "@/components/ui/select";
 
 import { toast } from "sonner";
+import { logout } from "@/services/authService";
+import { useNavigate } from "react-router-dom";
 
 
 const EmpDash = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [tasks, setTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState(true);
   const [mobileMenu, setMobileMenu] = useState(false);
+
+
+
+
+   const handleLogout = async () => {
+      try {
+        await logout()
+        setUser(null)
+        navigate("/login")
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Error logging out")
+        console.error(error.response?.dat?.message)
+      }
+    }
 
 
   // FETCH TASKS
@@ -70,6 +87,10 @@ const EmpDash = () => {
   }, []);
 
   // TASK COUNTS
+
+  // handle logout
+
+  
  
   const totalTasks = tasks.length;
 
@@ -241,7 +262,7 @@ const EmpDash = () => {
       </div>
        <div className="absolute bottom-4 left-4 right-4">
 
-          <Button 
+          <Button onClick = {handleLogout}
             variant="ghost"
             className="w-full justify-start gap-3 text-red-500 hover:bg-red-50 hover:text-red-600"
           >
@@ -260,7 +281,8 @@ const EmpDash = () => {
 
       {/* SIDEBAR */}
 
-      <Sidebar />
+      {/* <Sidebar /> */}
+      <Sidebar/>
 
       {/* MOBILE OVERLAY */}
 
@@ -1063,12 +1085,12 @@ const EmpDash = () => {
 
                   </div>
 
-                  <Button
+                  {/* <Button
                     variant="outline"
                     size="sm"
                   >
                     View All
-                  </Button>
+                  </Button> */}
 
                 </div>
 

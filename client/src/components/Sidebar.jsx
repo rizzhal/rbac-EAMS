@@ -17,6 +17,12 @@ const Sidebar = () => {
       await logout()
       setUser(null)
       navigate("/login")
+      // if(logout){
+      //   navigate("/login")
+      // } else {
+      //   <p className='text-red-500 flex justify-center items-center'>Invalid page </p>
+      // }
+    
     } catch (error) {
       toast.error(error.response?.data?.message || "Error logging out")
     }
