@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: import.meta.env.RENDER_API_URL || 'https://eams-itbx.onrender.com',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api',
     timeout: 5000,
     withCredentials: true
 })
