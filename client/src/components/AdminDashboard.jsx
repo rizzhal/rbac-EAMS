@@ -302,9 +302,13 @@ const AdminDashboard = () => {
                           Status
                         </th>
 
-                        <th className="px-6 py-3">
+                        {/* <th className="px-6 py-3">
                           Action
-                        </th>
+                        </th> */}
+
+                        <th className="px-6 py-3">
+                            Created
+                          </th>
 
                       </tr>
                     </thead>
@@ -333,11 +337,31 @@ const AdminDashboard = () => {
                           </Badge>
                         </td>
 
-                        <td className="px-6 py-4">
+                        {/* <td className="px-6 py-4">
                           <Button variant="ghost" size="icon">
                             <MoreVertical size={18} />
                           </Button>
-                        </td>
+                        </td> */}
+                         <td className="px-6 py-4">
+
+                              <p className="whitespace-nowrap text-xs text-slate-500">
+
+                                {task.createdAt
+                                  ? new Date(
+                                      task.createdAt
+                                    ).toLocaleDateString(
+                                      "en-US",
+                                      {
+                                        month: "short",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                      }
+                                    )
+                                  : "—"}
+
+                              </p>
+
+                            </td>
 
                         </tr>
                       ))}
